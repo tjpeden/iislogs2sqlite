@@ -7,20 +7,42 @@ import * as childProcess from 'child_process';
 
 @Injectable()
 export class ElectronService {
-
-  ipcRenderer: typeof ipcRenderer;
-  childProcess: typeof childProcess;
+  private ipc: typeof ipcRenderer;
 
   constructor() {
     // Conditional imports
     if (this.isElectron()) {
-      this.ipcRenderer = window.require('electron').ipcRenderer;
-      this.childProcess = window.require('child_process');
+      this.ipc = window.require('electron').ipcRenderer;
     }
   }
 
-  isElectron = () => {
+  isElectron() {
     return window && window.process && window.process.type;
   }
 
+  connect(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.ipc.send('connect');
+      this.ipc.once('connect-result', (event, error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(true);
+        }
+      })
+    });
+  }
+
+  ingest(file: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.ipc.send('ingest', file);
+      this.ipc.once('ingest-result', (event, error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
 }

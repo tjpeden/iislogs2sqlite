@@ -1,11 +1,11 @@
 {
-  "name": "angular-electron",
-  "version": "1.9.0",
-  "description": "Angular 4 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "iislogs2sqlite",
+  "version": "1.0.0",
+  "description": "Ingest IIS logs into SQLite3",
+  "homepage": "https://github.com/tjpeden/iislogs2sqlite",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "TJ Peden",
+    "email": "tj@tjcoding.com"
   },
   "keywords": [
     "angular",
@@ -21,7 +21,7 @@
     "start": "npm-run-all --parallel webpack:watch electron:serve",
     "webpack:watch": "webpack --watch",
     "start:web": "webpack-dev-server --content-base . --port 4200 --inline",
-    "build:electron:main": "tsc main.ts --outDir dist && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
+    "build:electron:main": "tsc src/electron/main.ts --outDir dist && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
     "build": "webpack --display-error-details && npm run build:electron:main",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "electron:serve": "npm run build:electron:main && electron ./dist --serve",
@@ -33,7 +33,11 @@
     "electron:mac": "npm run build:prod && node package.js --asar --platform=darwin --arch=x64",
     "test": "karma start ./karma.conf.js",
     "pree2e": "webdriver-manager update --standalone false --gecko false --quiet && npm run build",
-    "e2e": "protractor ./protractor.conf.js"
+    "e2e": "protractor ./protractor.conf.js",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "software.peden.iislogs2sqlite"
   },
   "dependencies": {
     "@angular/common": "4.4.3",
@@ -45,8 +49,14 @@
     "@angular/platform-browser-dynamic": "4.4.3",
     "@angular/router": "4.4.3",
     "core-js": "2.4.1",
+    "csv-parse": "^2.0.0",
+    "electron-builder": "^19.43.4",
     "enhanced-resolve": "3.3.0",
+    "flex-layout-attribute": "^1.0.3",
+    "knex": "^0.14.0",
     "rxjs": "5.4.3",
+    "sqlite3": "^3.1.13",
+    "stream-transform": "^1.0.0",
     "zone.js": "0.8.17"
   },
   "devDependencies": {

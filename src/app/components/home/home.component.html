@@ -1,5 +1,10 @@
-<div class="container">
-  <h1 class="title">
-    {{title}}
-  </h1>
+<div class="container" layout="column center-center" (dragover)="$event.preventDefault()" (dragleave)="$event.preventDefault()">
+  <div class="loading" *ngIf="loading">Loading...</div>
+  <div class="drop-zone" layout="column center-center" (drop)="ingest($event)" *ngIf="!loading">
+    <h1>Drop logs here</h1>
+  </div>
+  <div layout="column center-center" *ngIf="files.length > 0">
+    <h2>{{files.length}}</h2>
+    <p>file(s) queued</p>
+  </div>
 </div>
